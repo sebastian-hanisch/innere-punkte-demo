@@ -1,5 +1,8 @@
 # Innere-Punkte-Verfahren – durch das Innere statt am Rand entlang – Streamlit-Demo
 
+**[→ Demo live ausprobieren](https://sebastianhanisch-innere-punkte-demo.streamlit.app/)**
+
+
 Achtes Stück der **Lineare-Programmierung-Reihe** der "Konzepte"-Reihe für die Website "Sebastian Hanisch – Operations Research und Machine Learning", Kind des [Ellipsoids](https://github.com/sebastian-hanisch/ellipsoid-demo) und Kontrast zum [Simplex](https://github.com/sebastian-hanisch/tableau-simplex-demo). Der Simplex läuft von Ecke zu Ecke, das Ellipsoid schließt die Lösung von außen ein und braucht Tausende von Iterationen. **Karmarkar (1984)** zeigte, dass es polynomial **und** schnell geht: das Verfahren läuft **durch das Innere** der zulässigen Menge, nie am Rand, entlang des **Zentralpfads** auf das Optimum zu. Je Iteration löst es ein lineares Gleichungssystem (die **Normalgleichungen**) und macht einen Newton-Schritt auf den gestörten Optimalitätsbedingungen z_j · s_j = μ. Die Demo implementiert vier primal-duale Verfahren (Affine Scaling, Kurzschritt, Langschritt, Mehrotra) mit Start ohne Zulässigkeit und **misst**, was davon stimmt. Vier Fragen: **(1) Der Pfad** – wie sieht der Weg aus? **(2) Iterationen** – wie viele braucht es, und wovon hängt es ab? **(3) Gegen Simplex und Ellipsoid** – was kostet es, wo gewinnt es? **(4) Grenzen** – Genauigkeit, Startpunkt, Skalierung.
 
 **Einordnung in die Reihe:** geplant sind zwölf Stücke, dies ist das achte (Details in `lp-planung/PLAN.md` des Portfolio-Ordners):
