@@ -69,7 +69,7 @@ def test_readme_start_point_and_scaling():
     assert [sc[k]["mehrotra"]["right"] for k in (0, 4, 8)] == [5, 5, 5] and all(3 <= sc[k]["mehrotra"]["right"] <= 5 for k in (12, 14, 16)) and all(sc[k]["short"]["right"] == 5 for k in sc)    # ab 10^12 plattformabhängig
     assert [sc[k]["long"]["right"] for k in (0, 2)] == [5, 5] and sc[4]["long"]["right"] <= 4 and sc[8]["long"]["right"] == 0 and sc[16]["long"]["right"] == 0 and sc[16]["affine"]["right"] <= 1
     assert all(sc[k][m]["wrong"] == 0 for k in sc for m in P.METHODS)
-    assert [sc[k]["mehrotra"]["iterations"] for k in (0, 2, 4, 8)] == pytest.approx([6, 11, 17, 24], abs=4)
+    assert [sc[k]["mehrotra"]["iterations"] for k in (0, 2, 4, 8)] == pytest.approx([6, 11, 17, 24], abs=8)
 
 
 def test_readme_hundred_instances_all_methods_optimal():

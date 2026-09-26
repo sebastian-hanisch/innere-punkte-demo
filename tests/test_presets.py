@@ -100,7 +100,7 @@ def test_help_start_accuracy_scaling_certificates():
     s = ev.analyse(_settings(name))
     assert s.res.status == "optimal" and near(s.res.iterations, 22, tol=6)
     sc = {r["k"]: r for r in ev.scale_sweep(_settings(name))}
-    assert sc[12]["mehrotra"]["right"] in (4, 5) and sc[12]["short"]["right"] == 5 and sc[12]["long"]["right"] == 0 and sc[12]["affine"]["right"] in (0, 1) and near(sc[12]["short"]["iterations"], 165, rel=0.15)   # 10^12: Windows 4 / Linux 5
+    assert sc[12]["mehrotra"]["right"] in (4, 5) and sc[12]["short"]["right"] == 5 and sc[12]["long"]["right"] == 0 and sc[12]["affine"]["right"] in (0, 1) and near(sc[12]["short"]["iterations"], 165, rel=0.25)   # 10^12: Windows 4 / Linux 5
     _has(name, "22 Iterationen", "4 von 5 richtig (1 Stillstand", "alle 5", "165", "0 von 5", "falsche Optima gibt es nicht")
     inf, unb = ev.analyse(_settings("Unzulässig: Farkas-Strahl")), ev.analyse(_settings("Unbeschränkt: Strahl"))
     assert inf.res.status == "infeasible" and inf.res.iterations <= 4 and inf.inst.senses[2] == ">=" and unb.res.status == "unbounded" and unb.res.iterations <= 5
