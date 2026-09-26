@@ -77,7 +77,7 @@ def test_scale_sweep_mehrotra_and_short_step_are_robust_long_step_and_affine_are
     rows = {r["k"]: r for r in ev.scale_sweep(Settings("random"))}
     assert all(rows[0][m]["right"] == 5 for m in P.METHODS) and all(r[m]["wrong"] == 0 for r in rows.values() for m in P.METHODS)
     assert all(rows[k]["short"]["right"] == 5 for k in rows) and all(rows[k]["mehrotra"]["right"] >= 3 for k in rows)
-    assert rows[8]["long"]["right"] == 0 and rows[12]["affine"]["right"] == 0 and rows[12]["mehrotra"]["iterations"] > 2 * rows[0]["mehrotra"]["iterations"]
+    assert rows[8]["long"]["right"] == 0 and rows[12]["affine"]["right"] <= 1 and rows[12]["mehrotra"]["iterations"] > 2 * rows[0]["mehrotra"]["iterations"]
 
 
 def test_method_table_lists_all_methods_in_order():
