@@ -228,7 +228,7 @@ else:
     st.markdown("**Wie gut konditioniert bleiben die Normalgleichungen?** Die Matrix M D Mᵀ ist gegen Ende der Iteration am schlechtesten konditioniert, weil D = Z/S extreme Werte annimmt:")
     if res.cond:
         st.plotly_chart(build_cond(res), width="stretch", key="s4_cond")
-        st.caption("Bei ε = 10^-8 bleibt die Kondition auf Zufallsinstanzen im Bereich 10^4 bis 10^7; erst nahe der Rundungsgenauigkeit (ε = 10^-14) steigt sie auf 10^15 und mehr, und dort kommt es zum Abbruch.")
+        st.caption("Bei ε = 10^-8 bleibt die Kondition auf Zufallsinstanzen im Bereich von etwa 10^4 bis 10^7; erst nahe der Rundungsgenauigkeit (ε = 10^-14) steigt sie auf manchen Instanzen auf 10^15 und mehr (in den fünf Sweep-Instanzen auf einer; die anderen bleiben unter 10^10), und dort kommt es je nach Instanz und Plattform zum Abbruch.")
     tok_eps = (settings.n, settings.method, settings.start_i)
     if st.button("Genauigkeit verschärfen", key="eps_start"):
         ss["eps_done"] = tok_eps
