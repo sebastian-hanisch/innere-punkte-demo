@@ -68,7 +68,7 @@ def flops_per_iteration(m, N, solves=1):
 
 @dataclass
 class IPMResult:
-    status: str                                       # "optimal" | "infeasible" | "unbounded" (Strahl nachgerechnet) | "suspect" | "numerical" | "limit"
+    status: str                                       # "optimal" | "infeasible" (Farkas-Strahl nachgerechnet) | "unbounded" (Strahl und zulässiger Punkt nachgerechnet) | "suspect" | "numerical" | "limit"
     x: tuple = ()                                     # Strukturvariablen (leer ohne Ergebnis)
     obj: float = float("nan")                         # Zielwert der Maximierung
     y: tuple = ()
@@ -118,6 +118,27 @@ def primal_ray(M, c, z, tol=1e-7):
     Mt = M / r[:, None] / cs
     ct = c / cs
     return bool(np.linalg.norm(Mt @ zh) <= tol and float(ct @ zh) < -tol * max(np.linalg.norm(ct), 1e-300))
+
+
+def feasibility(M, b, eps=1e-9, tol=1e-7):
+    """Zulässigkeit getrennt prüfen (Phase 1): min Summe der Hilfsvariablen t unter M z + D t = b, z, t >= 0 (D = Vorzeichen von b; immer zulässig und nach unten beschränkt, das Verfahren löst es also mit
+    demselben Kern). Rechnung in zeilen- und spaltenskalierten Größen. Rückgabe ("feasible", z): ein z >= 0 mit M z = b, nachgerechnet; ("infeasible", y): ein nachgerechnetes Farkas-y (aus dem Dual der Phase 1);
+    ("unknown", None): Phase 1 konvergiert nicht oder ihr Ergebnis hält der Nachrechnung nicht stand."""
+    r, c = _equilibrate(M)
+    Mt, bt = M / r[:, None] / c, b / r
+    m, N = Mt.shape
+    M1 = np.hstack([Mt, np.diag(np.where(bt >= 0, 1.0, -1.0))])
+    cost = np.concatenate([np.zeros(N), np.ones(m)])
+    res = _ipm(None, "mehrotra", eps, 200, False, False, None, 1.0, (M1, bt, cost, N, ""))
+    if res.status != "optimal":
+        return "unknown", None
+    zt, yt = np.array(res.x), np.array(res.y)
+    scale = 1.0 + np.linalg.norm(bt)
+    if -res.obj <= tol * scale and zt.min() >= 0 and np.linalg.norm(Mt @ zt - bt) <= tol * scale:
+        return "feasible", zt / c
+    if dual_ray(Mt, bt, yt):
+        return "infeasible", yt / r
+    return "unknown", None
 
 
 def newton_direction(M, z, s, L, r_p, r_d, r_c):
@@ -170,6 +191,8 @@ def _ipm(inst, method, eps, max_iter, keep, keep_cond, start, start_factor, std)
         z, s = z * start_factor, s * start_factor
     else:
         z, y, s = (np.array(v, dtype=float) for v in start)
+    if not (np.all(np.isfinite(z)) and np.all(np.isfinite(s)) and z.min() > 0 and s.min() > 0):             # z.B. quadratisches Gleichungssystem: das Dual hat keinen inneren Punkt (s = 0), mu = 0
+        return IPMResult(status="numerical", n_struct=n, m=m, N=N, note="Startpunkt nicht strikt positiv (kein innerer Punkt)")
     nb, nc = 1.0 + np.linalg.norm(b), 1.0 + np.linalg.norm(c)
     sigma_short = 1.0 - 0.4 / math.sqrt(N)
     if keep:
@@ -189,8 +212,14 @@ def _ipm(inst, method, eps, max_iter, keep, keep_cond, start, start_factor, std)
         if it >= 3 and dual_ray(M, b, y):
             res.status, res.note = "infeasible", "Strahl y mit M^T y <= 0 und b^T y > 0 gefunden (Farkas-Zertifikat)"
             break
-        if it >= 3 and primal_ray(M, c, z):
-            res.status, res.note = "unbounded", "Strahl z >= 0 mit M z = 0 und c^T z < 0 gefunden (unbeschränkt)"
+        if it >= 3 and primal_ray(M, c, z):                                               # ein Strahl allein beweist nichts: auch die leere Menge hat Richtungen, also die Zulässigkeit getrennt prüfen
+            verdict = feasibility(M, b)[0]
+            if verdict == "feasible":
+                res.status, res.note = "unbounded", "Strahl z >= 0 mit M z = 0 und c^T z < 0 gefunden und ein zulässiger Punkt nachgerechnet (Phase 1): unbeschränkt"
+            elif verdict == "infeasible":
+                res.status, res.note = "infeasible", "Phase 1 liefert ein Farkas-y (M^T y <= 0, b^T y > 0): die Menge ist leer; der gefundene Strahl mit c^T z < 0 ist nur eine Richtung ohne Punkt, also keine Unbeschränktheit"
+            else:
+                res.status, res.note = "suspect", "Strahl z >= 0 mit M z = 0 und c^T z < 0 gefunden, aber die Zulässigkeit ist nicht belegt (Verdacht auf Unbeschränktheit oder Unzulässigkeit, kein Beweis)"
             break
         if np.max(np.abs(z)) > DIVERGENCE * nb or np.max(np.abs(s)) > DIVERGENCE * nc:
             res.status, res.note = "suspect", "Iterierte laufen davon (Verdacht auf Unbeschränktheit, kein Beweis)"

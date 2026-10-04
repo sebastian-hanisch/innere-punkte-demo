@@ -73,7 +73,7 @@ with st.expander("So funktioniert ein Innere-Punkte-Verfahren", expanded=True):
 2. **Zentralpfad:** für jedes μ > 0 gibt es genau einen Punkt mit z_j s_j = μ für alle j; für μ → 0 läuft er auf das Optimum zu. Jede Iteration zielt auf einen Punkt mit kleinerem μ.
 3. **Newton-Schritt:** die Richtung löst M Δz = Residuum, Mᵀ Δy + Δs = Residuum, S Δz + Z Δs = σμ − z s. Eliminiert man Δz und Δs, bleiben die **Normalgleichungen** M (Z/S) Mᵀ Δy = rechte Seite: ein dichtes System mit Cholesky-Zerlegung, je Iteration der Hauptaufwand.
 4. **Schrittlänge:** nur so weit, dass z und s strikt positiv bleiben. Die Verfahren unterscheiden sich in σ (wie stark zentriert wird) und der Schrittlänge: **Affine Scaling** (σ = 0), **Kurzschritt** (fester Faktor, Theorie √N · ln(1/ε)), **Langschritt** (σ = 0.1 und Umgebung des Pfades), **Mehrotra** (Prädiktor-Korrektor: σ aus einem Probeschritt).
-5. **Start ohne Zulässigkeit:** das Verfahren braucht keinen zulässigen Startpunkt; die Residuen werden mit den Schritten kleiner. Unzulässige und unbeschränkte Instanzen zeigen sich durch Strahlen (Farkas), die die Demo nachrechnet.
+5. **Start ohne Zulässigkeit:** das Verfahren braucht keinen zulässigen Startpunkt; die Residuen werden mit den Schritten kleiner. Unzulässige und unbeschränkte Instanzen zeigen sich durch Strahlen (Farkas), die die Demo nachrechnet; bei Unbeschränktheit prüft sie zusätzlich getrennt, dass es überhaupt einen zulässigen Punkt gibt (ein Strahl allein genügt nicht).
         """
     )
 
@@ -275,7 +275,7 @@ st.markdown(
 |---|---|---|
 | **Innere Punkte sind immer schneller.** | Im Operationsmodell liegt das Verfahren auf Zufallsinstanzen bis n = 40 beim etwa 16- bis 24-Fachen des Simplex (wenige Pivots gegen wenige Iterationen mit teuren Schritten); nur auf dem Klee-Minty-Würfel gewinnt es, ab n = 7. | Große, dünne LPs |
 | **Dichte Rechnung genügt.** | Die Demo faktorisiert die Normalmatrix dicht (m³/3). Echte Löser nutzen dünne Faktorisierungen, Präsolve und eine besondere Behandlung dichter Spalten; erst dort spielt das Verfahren seine Stärke aus. | Dünne Lineare Algebra |
-| **Der Startpunkt ist egal.** | Große Startpunkte kosten kaum etwas, zu kleine lassen das Verfahren stillstehen. Ein "Verdacht" bei Unzulässigkeit oder Unbeschränktheit ist kein Beweis; belegt ist nur ein nachgerechneter Strahl. | Homogene selbstduale Einbettung |
+| **Der Startpunkt ist egal.** | Große Startpunkte kosten kaum etwas, zu kleine lassen das Verfahren stillstehen. Ein "Verdacht" bei Unzulässigkeit oder Unbeschränktheit ist kein Beweis; belegt ist nur ein nachgerechneter Strahl (bei Unbeschränktheit samt zulässigem Punkt). | Homogene selbstduale Einbettung |
 | **Das Ergebnis ist eine Ecke.** | Das Verfahren endet im Inneren, nahe am Optimum, nicht in einer Ecke; Duale und Basis (Ranging, Warmstart) bekommt man erst mit **Crossover**. | Crossover |
 | **Gleitkomma ist genug.** | Die Normalmatrix wird gegen Ende extrem schlecht konditioniert; schlechte Skalierung der Spalten kostet Iterationen und kann zum Stillstand führen, und ab etwa ε = 10^-14 lässt sich das Zertifikat nicht mehr schließen. | Präsolve und Skalierung |
 """

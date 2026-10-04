@@ -46,7 +46,7 @@ PRESET_HELP = {
     "Genauigkeitsgrenze": "Zufall 16 × 16, ε = 10^-14: nach 442 Iterationen scheitert die Numerik (die Iterierten bleiben nicht mehr strikt positiv), es gibt kein Ergebnis; die Bruchstelle hängt von der Plattform ab (Wert vom Entwicklungsrechner unter Windows). Über fünf Instanzen erreichen bis ε = 10^-13 alle das Zertifikat (im Median 5 Iterationen bei 10^-2, 10 bei 10^-13), bei 10^-14 nur 4 von 5. Klick auf 'Genauigkeit verschärfen'.",
     "Schlechte Skalierung": "Zufall 8 × 8 (Seed 35), Spalten über 10^12 gestreut: Mehrotra findet das Optimum nach 22 Iterationen. Über fünf Instanzen löst Mehrotra bei 10^12 4 von 5 richtig (1 Stillstand; unter Linux 5 von 5), der Kurzschritt alle 5 (aber rund 165 Iterationen), der Langschritt 0 von 5 und Affine Scaling 0 von 5 (unter Linux bis 1); falsche Optima gibt es nicht. Klick auf 'Schlechte Skalierung testen'.",
     "Unzulässig: Farkas-Strahl": "Nach 2 Iterationen ist ein Strahl y mit Mᵀy ≤ 0 und bᵀy > 0 gefunden: die Mindestmenge x1 ≥ 6 widerspricht x1 ≤ 4. Der Strahl ist nachgerechnet, also ein Beweis und kein Verdacht.",
-    "Unbeschränkt: Strahl": "Nach 3 Iterationen ist ein Strahl z ≥ 0 mit Mz = 0 und cᵀz < 0 gefunden: der Zielwert wächst ohne Grenze. Anders als beim Ellipsoid (Kugelrand ohne Beweis) ist das ein Beweis.",
+    "Unbeschränkt: Strahl": "Nach 3 Iterationen ist ein Strahl z ≥ 0 mit Mz = 0 und cᵀz < 0 gefunden und durch eine getrennte Rechnung (Phase 1) ein zulässiger Punkt nachgewiesen: der Zielwert wächst ohne Grenze. Anders als beim Ellipsoid (Kugelrand ohne Beweis) ist das ein Beweis.",
 }
 
 
