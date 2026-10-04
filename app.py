@@ -64,7 +64,7 @@ Optimalitätsbedingungen x·s = μ. Vier Fragen, alle gemessen: **(1) Der Pfad**
 **(4) Grenzen** - Genauigkeit, Startpunkt, Skalierung.
 """
 )
-st.caption("Kind des [Ellipsoids](https://github.com/sebastian-hanisch/ellipsoid-demo) und Kontrast zum [Simplex](https://github.com/sebastian-hanisch/tableau-simplex-demo). Folgestücke (Crossover, PDLP, Präsolve) sind [noch nicht gebaut].")
+st.caption("Kind des [Ellipsoids](https://github.com/sebastian-hanisch/ellipsoid-demo) und Kontrast zum [Simplex](https://github.com/sebastian-hanisch/tableau-simplex-demo). Folgestücke sind gebaut: [Präsolve und Numerik](https://github.com/sebastian-hanisch/praesolve-demo), [PDLP](https://github.com/sebastian-hanisch/pdlp-demo) und [Crossover](https://github.com/sebastian-hanisch/crossover-demo).")
 
 with st.expander("So funktioniert ein Innere-Punkte-Verfahren", expanded=True):
     st.markdown(
@@ -277,7 +277,7 @@ st.markdown(
 | **Dichte Rechnung genügt.** | Die Demo faktorisiert die Normalmatrix dicht (m³/3). Echte Löser nutzen dünne Faktorisierungen, Präsolve und eine besondere Behandlung dichter Spalten; erst dort spielt das Verfahren seine Stärke aus. | Dünne Lineare Algebra |
 | **Der Startpunkt ist egal.** | Große Startpunkte kosten kaum etwas, zu kleine lassen das Verfahren stillstehen. Ein "Verdacht" bei Unzulässigkeit oder Unbeschränktheit ist kein Beweis; belegt ist nur ein nachgerechneter Strahl. | Homogene selbstduale Einbettung |
 | **Das Ergebnis ist eine Ecke.** | Das Verfahren endet im Inneren, nahe am Optimum, nicht in einer Ecke; Duale und Basis (Ranging, Warmstart) bekommt man erst mit **Crossover**. | Crossover |
-| **Gleitkomma ist genug.** | Die Normalmatrix wird gegen Ende extrem schlecht konditioniert; schlechte Skalierung der Spalten kostet Iterationen und kann zum Stillstand führen, und ab etwa ε = 10^-13 lässt sich das Zertifikat nicht mehr schließen. | Präsolve und Skalierung |
+| **Gleitkomma ist genug.** | Die Normalmatrix wird gegen Ende extrem schlecht konditioniert; schlechte Skalierung der Spalten kostet Iterationen und kann zum Stillstand führen, und ab etwa ε = 10^-14 lässt sich das Zertifikat nicht mehr schließen. | Präsolve und Skalierung |
 """
 )
 
@@ -300,6 +300,6 @@ Implementiert in `ipm_ipm.py` (Newton-Schritt, vier Verfahren, Zertifikate), `ip
 st.markdown("---")
 st.caption(
     "Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – "
-    "Operations Research und Machine Learning. Interesse an einer maßgeschneiderten Lösung für "
-    "Ihr Unternehmen? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html)"
+    "Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). "
+    "Mehr zur Reihe: [Lineare Programmierung: vom Tableau zum Crossover](https://sebastianhanisch.net/konzepte-lineare-programmierung.html)."
 )

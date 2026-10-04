@@ -10,11 +10,11 @@ Achtes Stück der **Lineare-Programmierung-Reihe** der "Konzepte"-Reihe für die
 ```
 Tableau-Simplex (Wurzel)                                                                  [gebaut: tableau-simplex-demo]
  ├─ Pivotregeln & Entartung ─ Simplex im schlimmsten und im typischen Fall (Klee-Minty)   [gebaut: pivotregeln-demo, klee-minty-demo]
- ├─ Revised Simplex ─ Präsolve, Skalierung & Numerik                                     [gebaut: revised-simplex-demo]  →  [nicht gebaut]
+ ├─ Revised Simplex ─ Präsolve, Skalierung & Numerik                                     [gebaut: revised-simplex-demo, praesolve-demo]
  ├─ Dualität & Sensitivität ─ Dualer Simplex & Neuoptimierung                            [gebaut: lp-dualitaet-demo, dualer-simplex-demo]
  ├─ Ellipsoid-Methode (Kontrast: polynomial in der Theorie)                              [gebaut: ellipsoid-demo]
  └─ Innere Punkte ─ PDLP (Verfahren erster Ordnung) ─ Crossover & Simplex gegen Innere Punkte gegen PDLP
-      [DIESES STÜCK]      →       [nicht gebaut]            →       [nicht gebaut]
+      [DIESES STÜCK]      →       [gebaut: pdlp-demo]       →       [gebaut: crossover-demo]
 ```
 
 Ergebnis in Kürze: **Wenige Iterationen, fast unabhängig von der Größe – aber im Operationsmodell auf Zufallsinstanzen trotzdem etwa das 16- bis 24-Fache des Simplex; nur auf dem Klee-Minty-Würfel gewinnt das Innere, und dort schon ab n = 7 (das Ellipsoid erst ab n = 13).** Mehrotra braucht bei ε = 10⁻⁸ im Median **4 Iterationen bei n = 2 und 9 bei n = 40** (Langschritt 11 und 21, Affine Scaling 10 und 19), der Kurzschritt mit festem Faktor wächst dagegen wie √N (79 und 448) und liegt bei 84 bis 89 % der Theorie-Schranke. Die Zahl der Stellen kostet fast nichts: von ε = 10⁻² bis 10⁻¹³ wachsen die Iterationen von 5 auf 10. Auf dem **Klee-Minty-Würfel** (n = 14) braucht der Simplex mit Dantzig-Regel 16383 Pivots, Mehrotra 17 Iterationen (273.530 gegen 14.253.210 Operationen im Modell). **Grenzen:** zu kleine Startpunkte lassen das Verfahren stillstehen (Faktor 0.001: 0 von 5 Läufen), bei schlechter Skalierung der Spalten (10¹²) jammt der Langschritt in allen Läufen, während Mehrotra 4 bis 5 von 5 richtig löst (je nach Plattform) und der konservative Kurzschritt alle 5; ab etwa ε = 10⁻¹⁴ lässt sich das Zertifikat nicht mehr verlässlich schließen. Unzulässigkeit und Unbeschränktheit werden über **nachgerechnete Strahlen** bewiesen (Farkas), nicht nur vermutet.
@@ -98,4 +98,4 @@ Tests: `pip install -r requirements-dev.txt` und `python -m pytest tests/ -W err
 - Mehrotra, S. (1992). *On the implementation of a primal-dual interior point method.* SIAM Journal on Optimization 2(4), 575–601.
 - Wright, S. J. (1997). *Primal-Dual Interior-Point Methods.* SIAM.
 
-Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning.
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Lineare Programmierung: vom Tableau zum Crossover](https://sebastianhanisch.net/konzepte-lineare-programmierung.html).
